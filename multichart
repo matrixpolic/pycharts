@@ -1,0 +1,115 @@
+kline=(
+    Kline()
+    .add_xaxis(time)
+    .add_yaxis(
+        "kline",
+        k
+    )
+    .set_global_opts(
+        datazoom_opts=[
+            opts.DataZoomOpts(
+                is_show=True,
+                xaxis_index=[0,1,2],
+                range_start=80,
+                range_end=100
+            )
+        ],
+        tooltip_opts=opts.TooltipOpts(trigger="axis", axis_pointer_type="cross"),
+    
+    )
+)
+line=(
+    Line()
+    .add_xaxis(time)
+    .add_yaxis(
+        "ma8",
+        df.ma8.tolist(),
+        color="blue",
+        label_opts=opts.LabelOpts(is_show=False)
+        
+    )
+    .add_yaxis(
+        "ma45",
+        df.ma45.tolist(),
+        color="green",
+        label_opts=opts.LabelOpts(is_show=False)
+        
+    )
+   
+
+)
+
+line2=(
+    Line()
+    .add_xaxis(time)
+    .add_yaxis(
+        None,
+        df.dup.tolist(),
+        linestyle_opts=opts.LineStyleOpts(opacity=0.5,color="blue"),
+        label_opts=opts.LabelOpts(is_show=False)
+        
+    )
+    .add_yaxis(
+        None,
+        df.ddn.tolist(),
+        linestyle_opts=opts.LineStyleOpts(opacity=0.5,color="blue"),
+        label_opts=opts.LabelOpts(is_show=False)
+        
+    )
+
+)
+
+kline=kline.overlap(line)
+kline.overlap(line2)
+
+kbar=(
+    Bar()
+    .add_xaxis(time)
+    .add_yaxis(
+        None,
+        y_axis=df.volume.tolist(),
+        label_opts=opts.LabelOpts(False),
+#         yaxis_index=0
+    )
+    
+)
+kbar2=(
+    Bar()
+    .add_xaxis(time)
+    .add_yaxis(
+        None,
+        y_axis=df.volume.tolist(),
+        label_opts=opts.LabelOpts(False),
+#         yaxis_index=0
+    )
+    
+)
+
+
+grid_chart = Grid(
+    init_opts = opts.InitOpts(
+        width = "1000px",
+        height = "800px",
+        animation_opts=opts.AnimationOpts(animation=False)
+    
+    )
+
+)
+
+grid_chart.add(
+    kline,
+    grid_opts=opts.GridOpts(pos_left="10%",pos_right="8%",height="40%")
+)
+grid_chart.add(
+    kbar,
+    grid_opts=opts.GridOpts(
+            pos_left="10%", pos_right="8%", pos_top="53%", height="10%"
+    )
+)
+grid_chart.add(
+    kbar2,
+    grid_opts=opts.GridOpts(
+            pos_left="10%", pos_right="8%", pos_top="73%", height="10%"
+    )
+)
+grid_chart.render_notebook()
